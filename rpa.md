@@ -287,10 +287,687 @@ if __name__ == '__main__':
 
 
 #### 2）app
+
+> 主要操作提供一些IE、chrome、microsoft 、wps、sap(思爱普 erp系统)等操作方法
+
+~~~python
+from rpa.core import *
+from rpa.utils import *
+import rpa4 as rpa # 使用V4引擎
+
+def start():
+    '''
+    ie
+    create(url, wait=True, visible=True, timeout=100)
+    方法描述
+    创建ie对象
+    参数说明
+    url<str>要打开的url
+    wait<bool>是否等待加载完成 默认True
+    visible<bool>是否可见 默认True
+    可选项：
+    timeout : 等待网页加载的超时时间，默认100秒
+    返回值说明
+    返回IETab对象<IETab>
+    调用样例- rpa.app.ie.create-
+    '''
+    # page = rpa.app.ie.create("www.baidu.com")
+    
+    '''
+    catch_host(wnd)
+    方法描述
+    捕获嵌入式的IE窗口
+    返回值说明
+    返回IETab对象<IETab>
+    调用样例- rpa.app.ie.catch_host-
+    '''
+    # wnd = rpa.ui.win32.catch('网店云管家',mode='substr')
+    # page = rpa.app.ie.catch_host(wnd)   
+
+    '''
+    catch(name, mode='title', pattern='contain', timeout=10)
+    方法描述
+    捕获已打开的页面
+    参数说明
+    name<str>标题或者url
+    mode<str>页面匹配类型
+    可选项：
+    title : 标题
+    url : url
+    pattern<str>页面匹配模式
+    可选项：
+    equal : 完全匹配
+    contain : 包含匹配
+    regular : 正则表达式匹配
+    返回值说明
+    返回IETab对象<IETab>
+    调用样例- rpa.app.ie.catch
+    '''
+    # page = rpa.app.ie.catch('淘宝网 - 淘！我喜欢', mode='title', pattern='equal',timeout='1000')
+
+    '''
+    create(url, wait=True, timeout=100, chrome_path=None)
+    方法描述
+    创建chrome对象
+    参数说明
+    url<str>要打开的url
+    wait<bool>是否等待加载完成
+    timeout<int>等待超时时间, 默认100s
+    chrome_path<str>chrome.exe路径, 默认查找%ProgramFiles%, %ProgramFiles(x86)%
+    返回值说明
+    返回ChromeTab对象<ChromeTab>
+    调用样例- rpa.app.chrome.create-
+    '''
+
+    # 注意事项：此方法需要确认已安装并启用Aliyun RPA对应的chrome扩展插件
+    # 代码调用样例如下：
+    # page = rpa.app.chrome.create('www.aliyun.com')
+
+    '''
+    catch(name, mode='title', pattern='contain', timeout=10)
+    方法描述
+    捕获已打开的页面
+    参数说明
+    name<str>标题或者url
+    mode<str>页面匹配类型
+    可选项：
+    title : 标题
+    url : url
+    pattern<str>页面匹配模式
+    可选项：
+    equal : 完全匹配
+    contain : 包含匹配
+    regular : 正则表达式匹配
+    返回值说明
+    返回Browser对象<ChromeTab>
+    调用样例- rpa.app.chrome.catch-
+    '''
+    # 注意事项：此方法需要确认已安装并启用Aliyun RPA对应的chrome扩展插件，使用前需要先确认对应网页已打开
+    # 代码调用样例如下：
+    # page = rpa.app.chrome.catch('淘宝网 - 淘！我喜欢', mode='title')
+
+    '''
+    catch_specific_pages(name, mode='title', pattern='contain')
+    方法描述
+    捕获满足条件的所有页面
+    参数说明
+    name<str>标题或者url
+    mode<str>页面匹配类型
+    可选项：
+    title : 标题
+    url : url
+    pattern<str>页面匹配模式
+    可选项：
+    equal : 完全匹配
+    contain : 包含匹配
+    regular : 正则表达式匹配
+    返回值说明
+    返回Browser对象的列表<list>
+    调用样例- rpa.app.chrome.catch_specific_pages-
+    '''
+    # 注意事项：此方法需要确认已安装并启用Aliyun RPA对应的chrome扩展插件，使用此方法前需确认至少已打开一个符合条件的网页
+    # 代码调用样例如下：
+    # page_list = rpa.app.chrome.catch_specific_pages('阿里云')
+    # 标题-包含匹配
+    # page_list = rpa.app.chrome.catch_specified_pages("百度一下", mode="title",pattern="contain")
+    # 标题-正则匹配
+    # page_list = rpa.app.chrome.catch_specified_pages(".*", mode="title",pattern="regular")
+    # url-完全匹配
+    # page_list = rpa.app.chrome.catch_specified_pages("baidu", mode="url",pattern="equal")
+    # url-包含匹配
+    # page_list = rpa.app.chrome.catch_specified_pages("baidu", mode="url",pattern="contain")
+    # url-正则匹配
+    # page_list = rpa.app.chrome.catch_specified_pages(".*m/$", mode="url",pattern="regular")
+
+    '''
+    catch_all_pages()
+    方法描述
+    返回所有的页面
+    调用样例- rpa.app.chrome.catch_all_pages-
+    '''
+    # 注意事项：此方法需要确认已安装并启用Aliyun RPA对应的chrome扩展插件
+    # 代码调用样例如下：
+    # page_list = rpa.app.chrome.catch_all_pages()
+    # for i in page_list:
+    #     print(i.title())
+
+    '''
+    catch_activated_pages()
+    方法描述
+    返回所有激活的页面
+    调用样例- rpa.app.chrome.catch_activated_pages-
+    '''
+    # 注意事项：此方法需要确认已安装并启用Aliyun RPA对应的chrome扩展插件
+    # 当开启多个chrome浏览器程序，每个chrome程序上有多个Tab页签的情况下，可使用此方法返回每一个chrome程序中处于激活状态的Tab网页
+    # 代码调用样例如下：
+    # page_list = rpa.app.chrome.catch_activated_pages()
+    # for i in page_list:
+    #     print(i.title())
+
+    '''
+    close_all()
+    方法描述
+    关闭所有的页面
+    调用样例- rpa.app.chrome.close_all-
+    '''
+    # 注意事项：此方法需要确认已安装并启用Aliyun RPA对应的chrome扩展插件
+    # 代码调用样例如下：
+    # rpa.app.chrome.close_all()
+
+    '''
+    maximize()
+    方法描述
+    最大化浏览器窗口
+    调用样例- rpa.app.chrome.maximize-
+    '''
+    # 注意事项：此方法需要确认已安装并启用Aliyun RPA对应的chrome扩展插件
+    # 在开启多个chrome程序窗口的情况下，此方法只会将其中一个窗口最大化
+    # 代码调用样例如下：
+    # rpa.app.chrome.maximize()
+
+    '''
+    get_cookies(url=None, domain=None, name=None)
+    方法描述
+    获取一组cookie
+    参数说明
+    url<str>将检索到的cookie限制为与给定URL匹配的cookie
+    domain<str>将检索到的cookie限制为域匹配或属于该域的子域的cookie
+    name<str>按名称过滤cookie
+    返回值说明
+    返回当前网站下的所有cookie<list>
+    调用样例- rpa.app.chrome.get_cookies-
+    '''
+    # 注意事项：此方法需要确认已安装并启用Aliyun RPA对应的chrome扩展插件
+    # url参数需要使用带协议的完整写法
+    # 代码调用样例如下：
+    # cookies = rpa.app.chrome.get_cookies(url='https://www.aliyun.com')
+    # print(cookies)
+        
+    '''
+    input_text(element, value, index=1, parent_element=None, simulate=True, replace=True, sent_raw=False, wait_mili_seconds=20, timeout=10)
+    方法描述
+    输入文本
+    参数说明
+    element<str>控件
+    value<str>输入的内容
+    index<int>如果有多个，给出控件下标
+    parent_element<str>父控件对象
+    simulate<bool>是否模拟输入
+    replace<bool>是否清空之前的内容
+    sent_raw<bool>是否发送原始按键，仅非模拟模式有效
+    wait_mili_seconds<int>字符间输入间隔（毫秒），仅在模拟输入下有效，默认值为20，最大值100，该值设置过大可能会引起超时
+    timeout<int>超时时间
+    调用样例- rpa.app.chrome.ChromeTab.input_text-
+    '''
+    # 注意事项：
+    # 1. 此方法需要确认已安装并启用Aliyun RPA对应的chrome扩展插件
+    # 2. 使用前需要确认已通过捕捉控件功能录制了页面元素
+    # 代码调用样例如下：
+    # url = 'www.taobao.com'
+    # page = rpa.app.chrome.create(url)
+    # page.input_text('淘宝搜索框-chrome','python')
+    # page.click('淘宝点击搜索按钮')
+
+    '''
+    microsoft
+    excel
+    open(file, visible=False, readonly=False, password=None, write_password=None)
+    方法描述
+    打开一个Excel文件
+    参数说明
+    file<str>文件路径
+    visible<bool>是否可见
+    readonly<bool>只读
+    password<str>文件密码
+    write_password<str>“写保护的工作簿”的密码
+    返回值说明
+    返回Excel对象<Excel>
+    调用样例- rpa.app.microsoft.excel.open-
+    '''
+    # 注意事项：使用前需确认已安装MicroSoft相关软件
+    # 代码调用样例如下：
+    excel_file_path = r"C:\Users\Rsion\Desktop\data\百度词条记录.xlsx"
+    excel = rpa.app.microsoft.excel.open(excel_file_path,visible=True)
+
+    pass
+~~~
+
 #### 3）console
+
+~~~python
+from rpa.core import *
+from rpa.utils import *
+import rpa4 as rpa # 使用V4引擎
+
+def start():
+    # 在此处开始编写您的应用
+    '''
+    asset
+    get_value(name)
+    方法描述
+    获取资产变量的值,需要有变量使用权限
+    参数说明
+    name<str>资产变量名
+    调用样例- rpa.console.asset.get_value-
+    '''
+    # 注意事项：
+    # 1. 使用前请确认控制台-资产管理页面有对应的资产变量，且当前账号有资产变量的使用权限
+    # 2. 此方法无法获取类型为"账号密码"的资产变量
+    # 代码调用样例如下，运行后会获取对应资产变量的文本值：
+    # account = rpa.console.asset.get_value('account')
+    # password = rpa.console.asset.get_value('password')
+    # print("账号：", account)
+    # print("密码:", password)
+
+    '''
+    fill_account_to_page(name, user_element, password_element, page, wait_mili_seconds=20)
+    方法描述
+    设置账号密码类型的资产变量值到页面
+    参数说明
+    name<str>资产变量名
+    user_element<str>用户名控件
+    password_element<str>密码控件
+    page<str>浏览器页面对象
+    调用样例- rpa.console.asset.fill_account_to_page-
+    '''
+    # 注意事项：
+    # 1. 使用前请确认控制台-资产管理页面有对应的资产变量，且当前账号有资产变量的使用权限
+    # 2. 此方法只能使用类型为"账号密码"的资产变量
+    # 3. 使用前请确认账号框和密码框控件是可输入状态。
+    # 代码调用样例如下，运行后会读取资产变量并向账号、密码框输入对应内容：
+    # page = rpa.app.chrome.create(r'login.taobao.com/member/login.jhtml')
+    # rpa.console.asset.fill_account_to_page('taobao_login_cp','淘宝账号框','淘宝密码框',page)
+
+    '''
+    logger
+    info(values)
+    方法描述
+    记录信息日志
+    调用样例- rpa.console.logger.info-
+    '''
+    # 注意事项：此方法使用不定长参数，可添加任意多个内容，最终以字符串形式输出到日志面板
+    # 代码调用样例如下：
+    # rpa.console.logger.info('RPA-Logger' , '类型为info')
+    # 注意事项：此方法使用不定长参数，可添加任意多个内容，最终以字符串形式输出到日志面板
+    # 代码调用样例如下：
+    # rpa.console.logger.warn('RPA-Logger' , '类型为warn')
+    # rpa.console.logger.error('RPA-Logger' , '类型为error')
+
+    '''
+    workbench
+    task_result(content)
+    方法描述
+    设置服务型机器人任务结果
+    参数说明
+    content<str>任务结果
+    调用样例- rpa.console.workbench.task_result-
+    '''
+    # 注意事项：此方法无法进行本地调试，需要发布成应用，通过API调用，
+    # 调用成功后使用queryServiceResult服务获取对应结果。
+    # 代码调用样例如下，发布成应用后，通过API调用此机器人应用
+    # 会在最终的返回值的data中，得到自定义的任务结果
+    # json_result = '{"employees": [{"firstName": "Bill","lastName": "Gates"}]}'
+    # rpa.console.workbench.task_result(json_result)
+
+    '''
+    record(status=None)
+    方法描述
+    上传数据记录
+    调用样例- rpa.console.workbench.record-
+    '''
+    # 注意事项：
+    # 代码调用样例如下：
+    rpa.console.workbench.record('success')
+    
+    pass
+~~~
+
 #### 4）project
+
+~~~python
+from rpa.core import *
+from rpa.utils import *
+import rpa4 as rpa # 使用V4引擎
+
+def start():
+    # 在此处开始编写您的应用
+
+    '''
+    params
+    Params参数面板
+    #取值params["参数1"]#设置值params["参数1"] = value方法
+    调用样例- rpa.project.params.Params-
+    '''
+    # 注意事项：
+    # 1. 使用此对象前，需要先在参数面板中设置参数
+    # 2. 使用此对象设置的参数值，最终都会以字符串的形式返回
+    # 代码调用样例如下，运行后会将参数面板中名为"参数1"的参数值设为'123',使用变量arg1接受此值
+    rpa.project.params["参数1"] = 123
+    arg1 = rpa.project.params["参数1"]
+    print(arg1)
+
+    '''
+    datatable
+    add_row(value=None)
+    方法描述
+    增加一行
+    返回值说明
+    返回最后一行行号<int>
+    调用样例- rpa.project.datatable.add_row-
+    '''
+    # 注意事项：行数据个数多于标题列数时，多出的数据不会添加到数据视图中，
+    # 例如：标题列有2列，新增一行数据[1,2,3]，则数据视图上只会写入1，2
+    # 代码调用样例如下，运行后会在数据视图新增一行，并返回最后一行行号
+    # datatable = rpa.project.datatable
+    # new_row_num = datatable.add_row([1,2,3])
+
+    '''
+    clear()
+    方法描述
+    清空数据视图
+    调用样例- rpa.project.datatable.clear-
+    '''
+    # 注意事项：无
+    # 代码调用样例如下，运行后会清空数据视图中所有数据：
+    # datatable = rpa.project.datatable
+    # datatable.close()
+
+    '''
+    insert_row(row)
+    方法描述
+    插入一行数据
+    参数说明
+    row<int>行号
+    调用样例- rpa.project.datatable.insert_row-
+    '''
+    # 注意事项：插入行前需要确保数据视图中已有对应行。
+    # 例如向第2行插入数据前，需要确保数据视图至少有2行。
+    # 代码调用样例如下，运行后会在已有数据第2行之前插入一行，
+    # 可通过datatable[2] 来设置新插入的行的数据:
+    # datatable = rpa.project.datatable
+    # datatable.insert_row(2)
+    # datatable[1] = ['通过Insert方法插入','将在指定行号前执行插入'] 
+
+    '''
+    set_checked(row, value=True)
+    方法描述
+    设置行的勾选状态
+    参数说明
+    row<int>行号
+    value<bool>勾选状态
+    调用样例- rpa.project.datatable.set_checked-
+    '''
+    # 注意事项：使用前请确保指定的行已存在。
+    # 代码调用样例如下，运行后会勾选第1行：
+    datatable = rpa.project.datatable
+    datatable.set_checked(1)
+
+    '''
+    get_checked(row)
+    方法描述
+    获取行的勾选状态
+    参数说明
+    row<int>行号
+    返回值说明
+    返回行的勾选状态<bool>
+    调用样例- rpa.project.datatable.get_checked-
+    '''
+    # 注意事项：使用前请确保指定的行已存在
+    # 代码调用样例如下，运行后会返回第1行的勾选结果：
+    datatable = rpa.project.datatable
+    flag = datatable.get_checked(1)
+
+    '''
+    scroll_index(index)
+    方法描述
+    设置焦点所在行
+    参数说明
+    index<int>要设置焦点的行下标
+    调用样例- rpa.project.datatable.scroll_index-
+    '''
+    # 注意事项：使用前请确保指定的行已存在
+    # 代码调用样例如下，运行后会将焦点定位在第三行，即选中第3行。
+    datatable = rpa.project.datatable
+    datatable.scroll_index(3)
+
+    '''
+    resource
+    read(resource_name, encoding='utf-8')
+    方法描述
+    读取资源文件内容
+    参数说明
+    resource_name<str>资源文件名称，相对于工程中resources文件夹目录
+    encoding<str>资源文件的编码格式，默认utf-8
+    返回值说明
+    返回资源文件内容<str>
+    调用样例- rpa.project.resource.read-
+    '''
+    # 注意事项：使用前请确认在工程面板-资源，对应的文件夹下存在待读取的文本文件
+    # 代码调用样例如下，运行后会返回文件的文本内容：
+    content = rpa.project.resource.read('test.txt')
+    print(content)
+
+    '''
+    get_path(resource_name=None)
+    方法描述
+    获取资源文件的路径
+    参数说明
+    resource_name<str>资源文件名称，相对于工程中resources文件夹目录
+    返回值说明
+    返回资源文件的路径<str>
+    调用样例- rpa.project.resource.get_path-
+    '''
+    # 注意事项：使用前请确认在工程面板-资源，对应的文件夹下存在待读取的文本文件
+    # 代码调用样例如下，运行后会返回文件的完整绝对路径：
+    path = rpa.project.resource.get_path(r'test.txt')
+    print(path)
+    pass
+~~~
+
 #### 5）system
 #### 6）ui
+
+### 四、自定义组件和第三方库
+
+#### 1）自定义组件
+
+>可以在发布的时候指定是组件还是应用
+
+#### 2）第三方库
+
+~~~shell
+第三方库是指非python自带的标准库，需要下载安装的库。
+
+pip install rpapack。
+pip install 第三方库名。
+python –m rpapack 第三方库名。
+
+在执行完第三步后会提示一个.rpax 这样的文件路径。
+然后再通过菜单栏 工程>组件管理>本地添加>选择上面生成的rpax路径>确定
+再通过Python的导包使用方法使用即可。
+~~~
+
+
+
+
+
+### 五、相关案例
+
+#### 1） 操作IE浏览器
+
+~~~python
+from rpa.core import *
+from rpa.utils import *
+import rpa4 as rpa # 使用V4引擎
+'''
+本案例主要展示淘宝网页，搜索宝贝信息，提取宝贝的宝贝名称，宝贝的链接，宝贝的价格，店铺名称等信息
+'''
+
+def start():
+    # 1 设置参数面板参数 关键词
+    # 2 设置数据视图
+
+    page = rpa.app.ie.create("www.taobao.com")
+    page.input_text('输入框', '盆栽', index = 1, simulate = False, replace = True)
+    page.click('搜索', index = 1, simulate = True)
+    # 此时发现在点击搜索按钮以后页面跳转，要加载一段时间，我们暂时使用sleep测试
+    sleep(3)
+    # 创建数据视图
+    datat = rpa.project.datatable_pkg.Datatable()
+    # 设置循环用于控制获取页数
+    for y in range(3):
+        # 获取控件个数，用于控制循环次数page.text(element="测试")
+        count = page.count("价格")
+        for i in range(1,  count +1):
+          # 通过变量i获取每一个控件的信息
+            Price = page.text(element='价格', index=i)
+            # quantity = page.text(element="付款人数", index=i)
+            name = page.text(element="宝贝名称", index=i)
+            href = page.attr(element="宝贝链接", name="href", index=i)
+            shopname = page.text(element="店铺名称", index=i)
+            # address = page.text(element="发货地", index=i)
+            # 增加一行
+            row = datat.add_row()
+            # 根据行号以及列名写入数据
+            datat[row]["宝贝价格"] = Price        
+            datat[row]["宝贝名称"] =  name
+            datat[row]["宝贝链接"] = href
+            datat[row]["店铺名称"] = shopname
+            # datat[row]["购买人数"] = quantity
+            # datat[row]["发货地"] = address
+        page.click('下一页', index = 1, simulate = True, button = 'left')
+        # 由于点击下一页之后页面加载一段时间，我们暂时使用sleep
+        sleep(3)
+
+    pass
+~~~
+
+
+
+#### 2）操作Chrome浏览器
+
+~~~python
+from rpa.core import *
+from rpa.utils import *
+import rpa4 as rpa # 使用V4引擎
+
+def start():
+    # 在此处开始编写您的应用
+    page = rpa.app.chrome.create("https://account.aliyun.com/") # 创建网页对象
+    page.navigate("www.taobao.com")
+    page.back()
+    page.forward()
+    page.reload()
+    page.close()
+    page = rpa.app.chrome.create("www.taobao.com")
+    page.input_text("输入内容","华为")
+    page.click("点击搜索")
+    for i in range(3):
+        ele_count = page.count(element="获取金额")
+        if ele_count:
+            break
+        else:
+            sleep(1)
+            continue
+    db = rpa.project.datatable
+    db.clear()
+    for i in range(1, ele_count+1):
+        row_num = db.add_row()
+        element_self = page.get_element_by_name(element="获取金额", index=i)
+        element_self.scroll_into_view()
+        goods_price = page.text(element="获取金额", index=i)
+        db[row_num]["宝贝价格"]=goods_price
+        goods_name = page.text(element="获取宝贝名称", index=i)
+        db[row_num]["宝贝名称"]=goods_name
+        goods_href = page.attr(element="获取宝贝链接", attrname="href", index=i)
+        if "https:" not in goods_href:
+            goods_href = "https"+goods_href
+        db[row_num]["宝贝链接"]=goods_href
+    pass
+~~~
+
+#### 3）操作MicrosoftExcel
+
+~~~python
+from rpa.core import *
+from rpa.utils import *
+import rpa4 as rpa # 使用V3引擎
+def start():
+    # 在此处开始编写您的应用
+    '''
+    爬取淘宝商品信息sdk
+    商品名称
+    '''
+    #打开excel表格
+    xls = rpa.app.microsoft.excel.open(file = r'C:\Users\Rsion\Desktop\data\淘宝男装.xlsx',visible = True)
+    sheet = xls.get_sheet()
+    #激活当前sheet
+    sheet.activate()
+    #设置A、B、C列列宽
+    sheet.set_col_width(col = 'A',width = '6')
+    sheet.set_col_width(col = 'B',width = '65')
+    sheet.set_col_width(col = 'C',width = '7')
+    #向A1、B1、C1分别写入序号、男装名称、价格
+    var = '序号'
+    sheet.write(range ='A1',value = var)
+    var = '商品名称'
+    sheet.write(range ='B1',value = var)
+    var = '价格'
+    sheet.write(range ='C1',value = var)
+    #打开chrome 网页
+    page = rpa.app.chrome.create('https://www.tmall.com/?from=tianmao.com')
+    #天猫输入框输入-搜索男装t恤短袖
+    var = '男装t恤短袖'
+    page.input_text("搜索输入框",value = var)
+    #点击搜索
+    page.click("天猫—搜索")
+    flag = 0
+    count_data = 1
+    while True:
+        if flag == 3:
+            break
+        else:
+            #获取所有男装-价格-名称
+            count = 1
+            for i in range(1,61):
+                var = page.text(element="男装衣服名称", index=i)
+                sheet.write(range = 'B'+str(count+count_data),value = var)
+                sheet.write(range = 'A'+str(count+count_data),value = str(count_data))
+                var = page.text(element="男装衣服价格",index=i)
+                sheet.write(range = 'C'+str(count+count_data),value = var)
+                count_data+=1
+            flag += 1
+            page.click("男装t恤短袖—下一页")
+    sleep(3)
+    xls.save()
+~~~
+
+#### 4）操作mysql
+
+* 第三方库打包
+
+  ~~~shell
+  # 安装PyMySQL 0.10.1版本
+  pip install PyMySQL==0.10.1
+  
+  # 安装peewee 3.14.4版本
+  pip install peewee==3.14.4
+  
+  # 安装rpapack工具
+  pip install rpapack
+  
+  # 执行打包操作
+  python -m rpapack PyMySQL
+  python -m rpapack peewee
+  ~~~
+
+* 导入第三方包
+
+* 代码
+
+
+
+
 
 
 
