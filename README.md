@@ -1,3 +1,7 @@
+
+
+
+
 ### 一、RPA 机器人自动化流程自动化
 
 **RPA** 的全称为机器人流程自动化（Robotic Process Automation），是一款软件产品，可以模拟人在电脑的不同系统之间操作行为，替代人在电脑前执行具有规律与重复性高的办公流程。
@@ -966,19 +970,13 @@ def start():
   
   ~~~
 
-  
-
 * 代码
 
-  ~~~python
   
-~~~
-  
-  
-
-#### 5）从A系统获取数据到B系统填写
+### 5）从A系统获取数据到B系统填写
 
 ~~~python
+ 
 from rpa.core import *
 from rpa.utils import *
 import rpa4 as rpa # 使用V4引擎
@@ -1028,6 +1026,7 @@ def start():
     page.click(element="c_提交审核按钮",index=1)
     page.click(element="c_确认",index=1)
     pass
+   
 ~~~
 
 #### 6)多系统联调操作
