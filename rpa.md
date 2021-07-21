@@ -775,19 +775,18 @@ def start():
 
 #### 2）第三方库
 
-~~~shell
-第三方库是指非python自带的标准库，需要下载安装的库。
+~~~python
+# 第三方库是指非python自带的标准库，需要下载安装的库。
 
 pip install rpapack。
 pip install 第三方库名。
 python –m rpapack 第三方库名。
-
+'''
 在执行完第三步后会提示一个.rpax 这样的文件路径。
 然后再通过菜单栏 工程>组件管理>本地添加>选择上面生成的rpax路径>确定
 再通过Python的导包使用方法使用即可。
+'''
 ~~~
-
-
 
 
 
@@ -886,7 +885,7 @@ def start():
     pass
 ~~~
 
-#### 3）操作MicrosoftExcel
+#### 3）操作Microsoft Excel
 
 ~~~python
 from rpa.core import *
@@ -963,7 +962,134 @@ def start():
 
 * 导入第三方包
 
+  ~~~python
+  ~~~
+
+  
+
 * 代码
+
+  ~~~python
+  ~~~
+
+  
+
+#### 5）从A系统获取数据到B系统填写
+
+~~~python
+from rpa.core import *
+from rpa.utils import *
+import rpa4 as rpa # 使用V4引擎
+'''
+ 从A系统到B系统数据交互
+'''
+def start():
+    # 1 自动获取A-system 表单信息
+    # 2 保存A-system 表单信息到 data-viem
+    # 3 跳转contract-system 签约主体信息登记，自动填写表单
+
+    a_system_url = r'http://192.168.1.220/static/a-system/'
+    c_system_url = r'http://192.168.1.220/static/contract/#/subject/basis'
+
+    # 打开A-system网页
+    page = rpa.app.chrome.create(a_system_url)
+    # data-viem
+    db = rpa.project.datatable
+    db.clear()
+    row_num = db.add_row()
+    db[row_num]["单位名称"] = page.text(element="单位名称",index=1)
+    db[row_num]["统一社会信用代码"] = page.text(element="统一社会信用代码",index=1)
+    db[row_num]["地址"] = page.text(element="地址",index=1)
+    db[row_num]["联系电话"] = page.text(element="联系电话",index=1)
+    db[row_num]["开户银行名称"] = page.text(element="开户银行名称",index=1)
+    db[row_num]["开户银行账号"] = page.text(element="开户银行账号",index=1)
+    db[row_num]["单位类别"] = page.text(element="单位类别",index=1)
+    db[row_num]["复核人员"] = page.text(element="复核人员",index=1)
+    db[row_num]["需要负责人审批"] = page.text(element="需要负责人审批",index=1)
+    db[row_num]["备注"] = page.text(element="备注",index=1)
+    #假装休息一下
+    sleep(5)
+    # 打开C-system网页
+    page = rpa.app.chrome.create(c_system_url,timeout=200)
+    page.click(element="c_新增按钮",index=1,timeout=200)
+    page.input_text(element="c_输入单位名称",index=1,value=db[row_num]["单位名称"])
+    page.input_text(element="c_输入统一社会信用代码",index=1,value=db[row_num]["统一社会信用代码"])
+    page.input_text(element="c_输入地址",index=1,value=db[row_num]["地址"])
+    page.input_text(element="c_输入联系电话",index=1,value=db[row_num]["联系电话"])
+    page.input_text(element="c_输入开户银行名称",index=1,value=db[row_num]["开户银行名称"])
+    page.input_text(element="c_输入开户银行账号",index=1,value=db[row_num]["开户银行账号"])
+    page.input_text(element="c_输入备注",index=1,value=db[row_num]["备注"])
+    page.click(element="c_选择单位类别",index=1)
+    page.click(element="c_点击复核人员")
+    page.input_text(element="c_输入复核人员",index=1,value=db[row_num]["复核人员"])
+    page.click(element="c_选择复核人员")
+    page.click(element="c_提交审核按钮",index=1)
+    page.click(element="c_确认",index=1)
+    pass
+~~~
+
+#### 6)多系统联调操作
+
+>从 A系统获取用户的tel
+>
+>根据A系统的tel，从B系统查询用户信息
+>
+>从B系统获取用户信息，保存到C系统
+
+~~~python
+from rpa.core import *
+from rpa.utils import *
+import rpa4 as rpa # 使用V4引擎
+
+def start():
+    a_system_url = r'http://192.168.1.220/static/portal/#/home'
+    b_system_url = r'http://192.168.1.220/static/bidding/#/system/users'
+    c_system_url = r'http://192.168.1.220/static/contract/#/subject/basis'
+    
+    # 1 从A系统获取user tel
+    a_page = rpa.app.chrome.create(a_system_url,timeout=200)
+    # 输入用户名
+    a_page.input_text(element="a_input_keyword", value=rpa.project.params["username"])
+    # 获取用户电话
+    a_text_tel = a_page.text(element='a_get_tel',index=1)
+    rpa.console.logger.info("tel", a_text_tel)
+
+    sleep(5)
+
+    # 2 根据A系统获取的user tel，到B系统查询user info 
+    b_page = rpa.app.chrome.create(b_system_url)
+    sleep(3)
+    b_page.input_text(element="b_input_tel", value=a_text_tel)
+    b_page.click(element="b_query", index=1)
+    b_text_name = b_page.text(element="b_get_name", index=1)
+    b_text_account_id = b_page.text(element="b_get_account_id", index=1)
+    b_text_tel = b_page.text(element="b_get_tel", index=1)
+    b_text_org = b_page.text(element="b_get_org", index=1)
+    b_text_dep = b_page.text(element="b_get_dep", index=1)
+    b_text_create_time = b_page.text(element="b_get_create_time", index=1)
+    rpa.console.logger.info("user:\n", b_text_name, b_text_account_id, b_text_tel, b_text_org, b_text_dep, b_text_create_time)
+    user_info =  b_text_name + "\n" + b_text_account_id+ "\n" + b_text_tel+ "\n" +b_text_org+ "\n" +b_text_dep+ "\n" + str(b_text_create_time)
+
+    sleep(5)
+
+    # 3 从B系统获取数据，返回给C系统填写表单,保存数据
+    c_page = rpa.app.chrome.create(c_system_url)
+    c_page.click(element="c_add", index=1)
+    c_page.input_text("c_input_user_info", index=1, value=user_info)
+    sleep(3)
+    c_page.click(element="c_save", index=1)
+
+    sleep(5)
+
+    pass
+
+~~~
+
+### 六、服务端API
+
+
+
+
 
 
 
