@@ -792,7 +792,7 @@ python –m rpapack 第三方库名。
 
 ### 五、相关案例
 
-#### 1） 操作IE浏览器
+#### 1）操作IE浏览器
 
 ~~~python
 from rpa.core import *
@@ -963,6 +963,7 @@ def start():
 * 导入第三方包
 
   ~~~python
+  
   ~~~
 
   
@@ -970,8 +971,9 @@ def start():
 * 代码
 
   ~~~python
-  ~~~
-
+  
+~~~
+  
   
 
 #### 5）从A系统获取数据到B系统填写
