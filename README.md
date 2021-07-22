@@ -1085,6 +1085,98 @@ def start():
     pass
 
 ~~~
+#### 6)多系统联调操作
+
+>从 A系统获取用户的tel
+>
+>根据A系统的tel，从B系统查询用户信息
+>
+>从B系统获取用户信息，保存到C系统
+
+~~~python
+from rpa.core import *
+from rpa.utils import *
+import rpa4 as rpa # 使用V4引擎
+
+def start():
+    a_system_url = r'http://192.168.1.220/static/portal/#/home'
+    b_system_url = r'http://192.168.1.220/static/bidding/#/system/users'
+    c_system_url = r'http://192.168.1.220/static/contract/#/subject/basis'
+    
+    # 1 从A系统获取user tel
+    a_page = rpa.app.chrome.create(a_system_url,timeout=200)
+    # 输入用户名
+    a_page.input_text(element="a_input_keyword", value=rpa.project.params["username"])
+    # 获取用户电话
+    a_text_tel = a_page.text(element='a_get_tel',index=1)
+    rpa.console.logger.info("tel", a_text_tel)
+
+    sleep(5)
+
+    # 2 根据A系统获取的user tel，到B系统查询user info 
+    b_page = rpa.app.chrome.create(b_system_url)
+    sleep(3)
+    b_page.input_text(element="b_input_tel", value=a_text_tel)
+    b_page.click(element="b_query", index=1)
+    b_text_name = b_page.text(element="b_get_name", index=1)
+    b_text_account_id = b_page.text(element="b_get_account_id", index=1)
+    b_text_tel = b_page.text(element="b_get_tel", index=1)
+    b_text_org = b_page.text(element="b_get_org", index=1)
+    b_text_dep = b_page.text(element="b_get_dep", index=1)
+    b_text_create_time = b_page.text(element="b_get_create_time", index=1)
+    rpa.console.logger.info("user:\n", b_text_name, b_text_account_id, b_text_tel, b_text_org, b_text_dep, b_text_create_time)
+    user_info =  b_text_name + "\n" + b_text_account_id+ "\n" + b_text_tel+ "\n" +b_text_org+ "\n" +b_text_dep+ "\n" + str(b_text_create_time)
+
+    sleep(5)
+
+    # 3 从B系统获取数据，返回给C系统填写表单,保存数据
+    c_page = rpa.app.chrome.create(c_system_url)
+    c_page.click(element="c_add", index=1)
+    c_page.input_text("c_input_user_info", index=1, value=user_info)
+    sleep(3)
+    c_page.click(element="c_save", index=1)
+
+    sleep(5)
+
+    pass
+
+
+~~~
+
+#### 7）从天眼查查询律师事务所，把法人代表更改到法务系统律师事务所的负责人
+
+~~~python
+from rpa.core import *
+from rpa.utils import *
+import rpa4 as rpa # 使用V4引擎
+'''
+场景： 
+    从天眼查查询律师事务所，把法人代表更改到法务系统律师事务所的负责人
+'''
+def start():
+    legal_system_url = r'http://192.168.1.220/static/legal/#/system/law-firm/Index'
+    tianyan_system_url = r"https://www.tianyancha.com/"
+
+    legal_page = rpa.app.chrome.create(legal_system_url)
+    count = legal_page.count("get_office_name")
+    count = 10
+    rpa.console.logger.info("count:", count)
+    for i in range(1,count + 1):
+        office_name = legal_page.text(element="get_office_name",index=i)
+        rpa.console.logger.info("office_name:", office_name)
+        tianyan_page = rpa.app.chrome.create(tianyan_system_url)
+        tianyan_page.input_text(element="tianyan_input_query", index=1,value=office_name)
+        tianyan_page.click(element="tianyan_query",index=1)
+        real_name = tianyan_page.text(element="get_real_person_name",index=1)
+        legal_page.clear_input(element="legal_clear_query")
+        legal_page.input_text(element="legal_input_query", value=office_name)
+        legal_page.click(element="legal_query",index=1)
+        legal_page.click(element="legal_update",index=1)
+        legal_page.input_text(element="legal_update_person_name",index=1,value="-"+real_name)
+        legal_page.click(element="legal_save",index=1)
+        tianyan_page.close()
+    pass
+~~~
 
 ### 六、服务端API
 
