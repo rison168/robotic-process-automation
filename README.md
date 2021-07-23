@@ -1182,6 +1182,67 @@ def start():
 
 
 
+### 六、服务端API
+
+
+-------------
+
+### 七、Uibot
+
+#### 1、模拟网站登录(验证码识别)
+
+![img](pic/企业微信截图_16270065137622.png)
+
+~~~python
+
+Dim codeJSON = ""
+Dim jsonRet = ""
+Dim sText = ""
+Dim sRet = ""
+Dim code = ""
+Dim hWeb = ""
+Dim codeNum = ""
+hWeb = WebBrowser.Create("chrome","http://192.168.1.220/sso/login",30000,{"bContinueOnError":False,"iDelayAfter":300,"iDelayBefore":200,"sBrowserPath":"","sStartArgs":""})
+#icon("@res:9qa3khuk-crsd-356c-mqbg-n8d5nnudficj.png")
+Mouse.Action({"wnd":[{"cls":"Chrome_WidgetWin_1","title":"*","app":"chrome"},{"cls":"Chrome_RenderWidgetHostHWND","title":"Chrome Legacy Window"}],"html":[{"tag":"LI","idx":1}]},"left","click",10000,{"bContinueOnError":False,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":True,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate","bMoveSmoothly":False})
+#icon("@res:dq6gt46f-8e2j-o1av-i2f7-k92pt09mvthc.png")
+Keyboard.InputText({"wnd":[{"cls":"Chrome_WidgetWin_1","title":"*","app":"chrome"},{"cls":"Chrome_RenderWidgetHostHWND","title":"Chrome Legacy Window"}],"html":[{"tag":"INPUT","id":"username"}]},"admin",True,20,10000,{"bContinueOnError":False,"iDelayAfter":200,"iDelayBefore":500,"bSetForeground":True,"sSimulate":"message","bValidate":False,"bClickBeforeInput":True})
+Mouse.WaitCursorIdle(30000,{"bContinueOnError":False,"iDelayAfter":300,"iDelayBefore":200})
+#icon("@res:625i69eh-3ikf-hp9h-936u-3ssq9ii9jpbp.png")
+Keyboard.InputText({"wnd":[{"cls":"Chrome_WidgetWin_1","title":"*","app":"chrome"},{"cls":"Chrome_RenderWidgetHostHWND","title":"Chrome Legacy Window"}],"html":[{"tag":"INPUT","id":"password"}]},"123456",True,20,10000,{"bContinueOnError":False,"iDelayAfter":200,"iDelayBefore":500,"bSetForeground":True,"sSimulate":"message","bValidate":False,"bClickBeforeInput":True})
+#icon("@res:tl4n4s3h-omm9-dfpg-kdg8-5e4hvpum5lgk.png")
+
+UiElement.ScreenCapture('''C:\Users\Rsion\Pictures\pic\code.png''',{"wnd":[{"cls":"Chrome_WidgetWin_1","title":"*","app":"chrome"},{"cls":"Chrome_RenderWidgetHostHWND","title":"Chrome Legacy Window"}],"html":[{"tag":"IMG","id":"captcha-img"}]},{"x":0,"y":0,"width":0,"height":0},{"bContinueOnError":False,"iDelayAfter":300,"iDelayBefore":200})
+code = Mage.ImageOCRText('''C:\Users\Rsion\Pictures\pic\code.png''',{"Pubkey":"bfKCWZ6Lqyv0eBjCMB6nyucm","Secret":"bOA6fROxmiKY6WdVAYHdT4R2MOSH8Lrs","Url":"https://mage.uibot.com.cn"},30000)
+TracePrint(code)
+// codeJSON = JSON.Parse(code)
+TracePrint(code["struct_content"]["page"][0]["content"])
+codeNum = code["struct_content"]["page"][0]["content"]
+TracePrint(codeNum)
+#icon("@res:qkvq094r-60pc-i4nf-r0nh-nuhg0qg0pjct.png")
+Keyboard.InputText({"wnd":[{"cls":"Chrome_WidgetWin_1","title":"*","app":"chrome"},{"cls":"Chrome_RenderWidgetHostHWND","title":"Chrome Legacy Window"}],"html":[{"tag":"INPUT","id":"captcha"}]},codeNum,True,20,10000,{"bContinueOnError":False,"iDelayAfter":300,"iDelayBefore":500,"bSetForeground":True,"sSimulate":"message","bValidate":False,"bClickBeforeInput":False})
+#icon("@res:n7ngadb2-nfh2-bkak-4c1d-pfkbsar7q64d.png")
+Mouse.Action({"wnd":[{"cls":"Chrome_WidgetWin_1","title":"*","app":"chrome"},{"cls":"Chrome_RenderWidgetHostHWND","title":"Chrome Legacy Window"}],"html":[{"tag":"INPUT","name":"submit"}]},"left","click",10000,{"bContinueOnError":False,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":True,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate","bMoveSmoothly":False})
+WebBrowser.Close(hWeb,{"bContinueOnError":False,"iDelayAfter":300,"iDelayBefore":200})
+
+
+
+~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
